@@ -45,6 +45,7 @@ export default function Home() {
       Alert.alert('Sucesso', 'Meta cadastrada!');
       setName('');
       setTotal('');
+      fetchGoals();
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível cadastrar.');
       console.log(error);

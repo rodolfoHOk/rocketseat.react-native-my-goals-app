@@ -19,3 +19,4 @@
 [NativeWind](https://www.nativewind.dev/v4/getting-started/expo-router)
 
 [Expo SQLite (Next)](https://docs.expo.dev/versions/latest/sdk/sqlite-next/)
+6

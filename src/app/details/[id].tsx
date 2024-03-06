@@ -13,9 +13,9 @@ import { BottomSheet } from '@/components/BottomSheet';
 import { Transactions } from '@/components/Transactions';
 import { TransactionProps } from '@/components/Transaction';
 import { TransactionTypeSelect } from '@/components/TransactionTypeSelect';
-import { mocks } from '@/utils/mocks';
 import { currencyFormat } from '@/utils/currencyFormat';
 import { useGoalRepository } from '@/database/useGoalRepository';
+import { useTransactionRepository } from '@/database/useTransactionRepository';
 
 type Details = {
   name: string;
@@ -35,6 +35,7 @@ export default function Details() {
   const goalId = Number(routeParams.id);
 
   const useGoal = useGoalRepository();
+  const useTransaction = useTransactionRepository();
 
   const bottomSheetRef = useRef<Bottom>(null);
   const handleBottomSheetOpen = () => bottomSheetRef.current?.expand();
@@ -44,7 +45,7 @@ export default function Details() {
     try {
       if (goalId) {
         const goal = useGoal.show(goalId);
-        const transactions = mocks.transactions;
+        const transactions = useTransaction.findByGoal(goalId);
         if (!goal || !transactions) {
           return router.back();
         }
@@ -74,12 +75,13 @@ export default function Details() {
       if (type === 'down') {
         amountAsNumber = amountAsNumber * -1;
       }
-      console.log({ goalId, amount: amountAsNumber });
+      useTransaction.create({ goalId, amount: amountAsNumber });
       Alert.alert('Sucesso', 'Transação registrada!');
       handleBottomSheetClose();
       Keyboard.dismiss();
       setAmount('');
       setType('up');
+      fetchDetails();
     } catch (error) {
       console.log(error);
     }
